@@ -4,8 +4,10 @@
       type="text"
       class="form-control"
       :class="{ 'is-invalid': inputRef.error }"
-      v-model="inputRef.val"
+      :value="inputRef.val"
       @blur="validateInput"
+      @input="handleInput"
+      v-bind="$attrs"
     />
     <span v-if="inputRef.error">{{ inputRef.message }}</span>
   </div>
@@ -19,14 +21,18 @@ interface RuleProp {
   message: string;
 }
 export type RulesProp = RuleProp[];
+// v-model 实现： 接收modelValue prop, 修改的时候触发update:modelValue方法
+// vue3 v-model 支持多个动态绑定
 export default defineComponent({
   name: 'ValidateInput',
+  inheritAttrs: false,
   props: {
-    rules: Array as PropType<RulesProp>
+    rules: Array as PropType<RulesProp>,
+    modelValue: String
   },
-  setup(props) {
+  setup(props, context) {
     const inputRef = reactive({
-      val: '',
+      val: props.modelValue || '',
       error: false,
       message: ''
     });
@@ -52,9 +58,16 @@ export default defineComponent({
       }
     };
 
+    const handleInput = (e: KeyboardEvent) => {
+      const targetValue = (e.target as HTMLInputElement).value;
+      inputRef.val = targetValue;
+      context.emit('update:modelValue', targetValue);
+    };
+
     return {
       validateInput,
-      inputRef
+      inputRef,
+      handleInput
     };
   }
 });

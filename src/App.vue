@@ -4,7 +4,8 @@
     <form>
       <div class="form-group">
         <label for="exampleInputEmail1">账号</label>
-        <ValidateInput :rules="rules"></ValidateInput>
+        {{ email }}
+        <ValidateInput :rules="rules" v-model="email" placeholder="jdskhfnsl"></ValidateInput>
       </div>
       <div class="form-group">
         <label for="exampleInputPassword1">密码</label>
@@ -20,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ColumnList, { ColumnProps } from './components/ColumnList.vue';
 import GlobalHeader, { UserProps } from './components/GlobalHeader.vue';
@@ -52,11 +53,16 @@ export default defineComponent({
     ValidateInput
   },
   setup() {
-    const rules: RulesProp = [{ type: 'email', message: '请输入正确的邮箱地址' }];
+    const rules: RulesProp = [
+      { type: 'required', message: '请输入邮箱地址' },
+      { type: 'email', message: '请输入正确的邮箱地址' }
+    ];
+    const email = ref('');
     return {
       list: testData,
       user,
-      rules
+      rules,
+      email
     };
   }
 });
