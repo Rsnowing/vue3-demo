@@ -1,21 +1,16 @@
 <template>
   <div class="container px-0">
     <global-header :user="user"></global-header>
-    <form>
+    <ValidateForm @submit="submitForm">
       <div class="form-group">
-        <label for="exampleInputEmail1">账号</label>
-        {{ email }}
-        <ValidateInput :rules="rules" v-model="email" placeholder="jdskhfnsl"></ValidateInput>
+        <label class="form-label">账号</label>
+        <ValidateInput :rules="accountRules" v-model="email" placeholder="账号" type="text"></ValidateInput>
       </div>
       <div class="form-group">
-        <label for="exampleInputPassword1">密码</label>
-        <input type="password" class="form-control" id="exampleInputPassword1" />
+        <label class="form-label">密码</label>
+        <ValidateInput :rules="passwordRules" v-model="password" placeholder="密码" type="password"></ValidateInput>
       </div>
-      <div class="form-group form-check">
-        <input type="checkbox" class="form-check-input" id="exampleCheck1" />
-        <label class="form-check-label" for="exampleCheck1">Check me out</label>
-      </div>
-    </form>
+    </ValidateForm>
     <column-list :list="list"></column-list>
   </div>
 </template>
@@ -26,6 +21,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import ColumnList, { ColumnProps } from './components/ColumnList.vue';
 import GlobalHeader, { UserProps } from './components/GlobalHeader.vue';
 import ValidateInput, { RulesProp } from './components/ValidateInput.vue';
+import ValidateForm from './components/ValidateForm.vue';
+
 const testData: ColumnProps[] = [
   {
     id: 1,
@@ -50,19 +47,29 @@ export default defineComponent({
   components: {
     ColumnList,
     GlobalHeader,
-    ValidateInput
+    ValidateInput,
+    ValidateForm
   },
   setup() {
-    const rules: RulesProp = [
+    const accountRules: RulesProp = [
       { type: 'required', message: '请输入邮箱地址' },
       { type: 'email', message: '请输入正确的邮箱地址' }
     ];
+    const passwordRules: RulesProp = [{ type: 'required', message: '请输入密码' }];
     const email = ref('');
+    const password = ref('');
+
+    const submitForm = (val: boolean) => {
+      console.log(val);
+    };
     return {
       list: testData,
       user,
-      rules,
-      email
+      accountRules,
+      passwordRules,
+      email,
+      submitForm,
+      password
     };
   }
 });
