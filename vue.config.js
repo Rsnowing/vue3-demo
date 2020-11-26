@@ -1,5 +1,18 @@
 module.exports = {
   // 配置scss全局引入的路径
+  devServer: {
+    proxy: {
+      '/api': {
+        target: `http://api.vikingship.xyz/api/`,
+        ws: true,
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api/': ''
+        }
+      }
+    }
+  },
+
   css: {
     loaderOptions: {
       sass: {

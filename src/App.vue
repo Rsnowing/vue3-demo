@@ -1,75 +1,41 @@
 <template>
   <div class="container px-0">
+    {{ name }}
     <global-header :user="user"></global-header>
-    <ValidateForm @submit="submitForm">
-      <div class="form-group">
-        <label class="form-label">账号</label>
-        <ValidateInput :rules="accountRules" v-model="email" placeholder="账号" type="text"></ValidateInput>
-      </div>
-      <div class="form-group">
-        <label class="form-label">密码</label>
-        <ValidateInput :rules="passwordRules" v-model="password" placeholder="密码" type="password"></ValidateInput>
-      </div>
-    </ValidateForm>
-    <column-list :list="list"></column-list>
+    <router-view></router-view>
+    <Footer></Footer>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent } from 'vue';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import ColumnList, { ColumnProps } from './components/ColumnList.vue';
-import GlobalHeader, { UserProps } from './components/GlobalHeader.vue';
-import ValidateInput, { RulesProp } from './components/ValidateInput.vue';
-import ValidateForm from './components/ValidateForm.vue';
-
-const testData: ColumnProps[] = [
-  {
-    id: 1,
-    title: 'hahh',
-    description: 'dshdkjsvd后端加'
-  },
-  {
-    id: 2,
-    title: 'hahh',
-    avatar:
-      'https://lh3.googleusercontent.com/QZata3XV8o_Ds74jV9_PsaHBNom7w04fqVGqM12OEJdDsAKLuli-RvTUamUr2dkSyXuHRqTDkZ4=w128-h128-e365-rj-sc0x00ffffff',
-    description: 'dshdkjsvd后端加'
-  }
-];
-const user: UserProps = {
-  isLogin: true,
-  name: '何必问'
-};
+import GlobalHeader from '@/components/GlobalHeader.vue';
+import Footer from './components/Footer.vue';
+import { useStore } from 'vuex';
+import { GlobalDataProps } from './store';
+import { getColumnList } from '@/api/column';
 
 export default defineComponent({
   name: 'App',
   components: {
-    ColumnList,
     GlobalHeader,
-    ValidateInput,
-    ValidateForm
+    Footer
   },
   setup() {
-    const accountRules: RulesProp = [
-      { type: 'required', message: '请输入邮箱地址' },
-      { type: 'email', message: '请输入正确的邮箱地址' }
-    ];
-    const passwordRules: RulesProp = [{ type: 'required', message: '请输入密码' }];
-    const email = ref('');
-    const password = ref('');
-
-    const submitForm = (val: boolean) => {
-      console.log(val);
+    const store = useStore<GlobalDataProps>(); // 让返回值变成GlobalDataProps泛型
+    const user = computed(() => store.state.user);
+    const getList = async () => {
+      try {
+        const res = await getColumnList({ currentPage: 1, pageSize: 10 });
+        console.log(res);
+      } catch (error) {
+        console.error(error);
+      }
     };
+    getList();
     return {
-      list: testData,
-      user,
-      accountRules,
-      passwordRules,
-      email,
-      submitForm,
-      password
+      user
     };
   }
 });

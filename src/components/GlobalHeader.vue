@@ -2,7 +2,9 @@
   <nav class="navbar bg-primary navbar-dark mb-4 justify-content-between">
     <a class="navbar-brand" href="#">必问</a>
     <ul v-if="!user.isLogin" class="list-inline mb-0">
-      <li class="list-inline-item"><a href="#" class="btn btn-outline-light my-2">登录</a></li>
+      <li class="list-inline-item">
+        <router-link to="/login" href="#" class="btn btn-outline-light my-2">登录</router-link>
+      </li>
       <li class="list-inline-item"><a href="#" class="btn btn-outline-light my-2">注册</a></li>
     </ul>
     <ul v-else class="list-inline mb-0">
@@ -20,11 +22,8 @@
 import { defineComponent, PropType } from 'vue';
 import Dropdown from './Dropdown.vue';
 import DropdownItem from './DropdownItem.vue';
-export interface UserProps {
-  isLogin: boolean;
-  name?: string;
-  id?: number;
-}
+import { UserProps } from '../store';
+
 export default defineComponent({
   name: 'GlobalHeader',
   components: { Dropdown, DropdownItem },

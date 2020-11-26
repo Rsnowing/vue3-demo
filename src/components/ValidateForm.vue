@@ -1,9 +1,9 @@
 <template>
   <form class="validate-form-contauber">
     <slot name="default"></slot>
-    <div class="submit-area">
+    <div class="submit-area" @click.prevent="submitForm">
       <slot name="submit">
-        <button type="submit" class="btn btn-primary" @click.prevent="submitForm">提交</button>
+        <div type="submit" class="btn btn-primary">提交</div>
       </slot>
     </div>
   </form>

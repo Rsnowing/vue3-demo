@@ -1,6 +1,16 @@
 <template>
   <div class="validate-input-container pb-3">
+    <textarea
+      v-if="tag === 'textarea'"
+      class="form-control"
+      :class="{ 'is-invalid': inputRef.error }"
+      @blur="validateInput"
+      v-model="inputRef.val"
+      v-bind="$attrs"
+    >
+    </textarea>
     <input
+      v-else
       class="form-control"
       :class="{ 'is-invalid': inputRef.error }"
       :value="inputRef.val"
@@ -22,6 +32,7 @@ interface RuleProp {
   message: string;
 }
 export type RulesProp = RuleProp[];
+export type InputType = 'input' | 'textarea';
 // v-model 实现： 接收modelValue prop, 修改的时候触发update:modelValue方法
 // vue3 v-model 支持多个动态绑定
 export default defineComponent({
@@ -29,7 +40,12 @@ export default defineComponent({
   inheritAttrs: false,
   props: {
     rules: Array as PropType<RulesProp>,
-    modelValue: String
+    modelValue: String,
+    tag: {
+      desc: '输入框类型',
+      type: String as PropType<InputType>,
+      default: 'input'
+    }
   },
   setup(props, context) {
     const inputRef = reactive({
