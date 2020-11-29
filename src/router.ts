@@ -4,6 +4,7 @@ import Login from '@/views/Login.vue';
 import ColumnDetail from '@/views/ColumnDetail.vue';
 import PostDetail from '@/views/PostDetail.vue';
 import CreatePost from '@/views/CreatePost.vue';
+import Test from '@/views/Test.vue';
 import store from './store';
 
 const router = createRouter({
@@ -13,7 +14,8 @@ const router = createRouter({
     { path: '/login', name: 'login', component: Login, meta: { needRedirctToHome: true } },
     { path: '/column/:id', name: 'column', component: ColumnDetail },
     { path: '/posts/:id', name: 'post', component: PostDetail },
-    { path: '/create', name: 'create', component: CreatePost, meta: { needLogin: true } }
+    { path: '/create', name: 'create', component: CreatePost, meta: { needLogin: true } },
+    { path: '/test', name: 'test', component: Test }
   ]
 });
 

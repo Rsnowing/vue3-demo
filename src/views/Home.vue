@@ -15,28 +15,35 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { computed, defineComponent, onMounted, ref } from 'vue';
 import ColumnList, { ColumnProps } from '@/components/ColumnList.vue';
-const testData: ColumnProps[] = [
-  {
-    id: 1,
-    title: 'hahh',
-    description: 'dshdkjsvd后端加'
-  },
-  {
-    id: 2,
-    title: 'hahh',
-    avatar:
-      'https://lh3.googleusercontent.com/QZata3XV8o_Ds74jV9_PsaHBNom7w04fqVGqM12OEJdDsAKLuli-RvTUamUr2dkSyXuHRqTDkZ4=w128-h128-e365-rj-sc0x00ffffff',
-    description: 'dshdkjsvd后端加'
-  }
-];
+import { getColumnList } from '@/api/column';
+// const testData: ColumnProps[] = [
+//   {
+//     id: 1,
+//     title: 'hahh',
+//     description: 'dshdkjsvd后端加'
+//   }
+// ];
 export default defineComponent({
   name: 'Home',
   components: { ColumnList },
+
   setup() {
+    const columnList = ref<ColumnProps[]>();
+    const getList = async () => {
+      try {
+        const res = await getColumnList({ currentPage: 1, pageSize: 10 });
+        columnList.value = res.data.list;
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    onMounted(() => {
+      getList();
+    });
     return {
-      list: testData
+      list: columnList
     };
   }
 });

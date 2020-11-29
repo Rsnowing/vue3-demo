@@ -7,9 +7,9 @@
         </h4>
         <div class="row my-3 align-items-center">
           <div v-if="post.image" class="col-4">
-            <img :src="post.image.fitUrl" :alt="post.title" class="rounded-lg w-100" />
+            <img :src="post.image.url" :alt="post.title" class="rounded-lg w-100" />
           </div>
-          <p :class="{ 'col-8': post.image }" class="text-muted">{{ post.excerpt }}</p>
+          <!-- <p :class="{ 'col-8': post.image }" class="text-muted">{{ post.excerpt }}</p> -->
         </div>
         <span class="text-muted">{{ post.createdAt }}</span>
       </div>
@@ -18,8 +18,22 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
-import { PostProps } from '../testData';
+import { computed, defineComponent, PropType } from 'vue';
+
+export interface ImageProps {
+  _id?: string;
+  url?: string;
+  createdAt?: string;
+  fitUrl?: string;
+}
+export interface PostProps {
+  _id: number;
+  title: string;
+  content: string;
+  image?: ImageProps;
+  createdAt: string;
+  columnId: number;
+}
 export default defineComponent({
   name: 'PostList',
   props: {
@@ -29,8 +43,20 @@ export default defineComponent({
     }
   },
   setup(props) {
+    const postList = computed(() => {
+      return (
+        props.list &&
+        props.list.map(post => {
+          post.image = {
+            url: post.image && post.image.url
+          };
+          return post;
+        })
+      );
+    });
+
     return {
-      posts: props.list
+      posts: postList
     };
   }
 });

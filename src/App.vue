@@ -1,6 +1,5 @@
 <template>
   <div class="container px-0">
-    {{ name }}
     <global-header :user="user"></global-header>
     <router-view></router-view>
     <Footer></Footer>
@@ -14,7 +13,6 @@ import GlobalHeader from '@/components/GlobalHeader.vue';
 import Footer from './components/Footer.vue';
 import { useStore } from 'vuex';
 import { GlobalDataProps } from './store';
-import { getColumnList } from '@/api/column';
 
 export default defineComponent({
   name: 'App',
@@ -25,15 +23,6 @@ export default defineComponent({
   setup() {
     const store = useStore<GlobalDataProps>(); // 让返回值变成GlobalDataProps泛型
     const user = computed(() => store.state.user);
-    const getList = async () => {
-      try {
-        const res = await getColumnList({ currentPage: 1, pageSize: 10 });
-        console.log(res);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    getList();
     return {
       user
     };
